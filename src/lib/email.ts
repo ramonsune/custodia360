@@ -1,6 +1,8 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = process.env.RESEND_API_KEY
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null;
 
 export interface EntityData {
   nombreEntidad: string;
@@ -48,6 +50,10 @@ export async function sendClientConfirmationEmail(
   paymentData: PaymentData,
   kitData: KitData
 ) {
+  if (!resend) {
+    throw new Error('Resend API key not configured');
+  }
+
   const { data, error } = await resend.emails.send({
     from: process.env.FROM_EMAIL || 'noreply@custodia360.es',
     to: [entityData.email],
@@ -72,6 +78,10 @@ export async function sendTeamNotificationEmail(
   paymentData: PaymentData,
   kitData: KitData
 ) {
+  if (!resend) {
+    throw new Error('Resend API key not configured');
+  }
+
   const { data, error } = await resend.emails.send({
     from: process.env.FROM_EMAIL || 'noreply@custodia360.es',
     to: [process.env.SALES_EMAIL || 'ventas@custodia360.es'],
@@ -94,6 +104,10 @@ export async function sendSecondPaymentReminderEmail(
   planData: PlanData,
   amount: number
 ) {
+  if (!resend) {
+    throw new Error('Resend API key not configured');
+  }
+
   const { data, error } = await resend.emails.send({
     from: process.env.FROM_EMAIL || 'noreply@custodia360.es',
     to: [entityData.email],
@@ -116,6 +130,10 @@ export async function sendWelcomeEmail(
   responsibleData: ResponsibleData,
   planData: PlanData
 ) {
+  if (!resend) {
+    throw new Error('Resend API key not configured');
+  }
+
   const { data, error } = await resend.emails.send({
     from: process.env.FROM_EMAIL || 'noreply@custodia360.es',
     to: [responsibleData.emailResponsable],

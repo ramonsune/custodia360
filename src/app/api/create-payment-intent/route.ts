@@ -2,12 +2,22 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
 // NETLIFY FORCE UPDATE: custodia360.es production ready
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-06-30.basil',
-});
+const stripe = process.env.STRIPE_SECRET_KEY
+  ? new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: '2025-06-30.basil',
+    })
+  : null;
 
 export async function POST(request: NextRequest) {
   try {
+    // Verificar que Stripe esté configurado
+    if (!stripe) {
+      return NextResponse.json(
+        { error: 'Stripe no está configurado' },
+        { status: 500 }
+      );
+    }
+
     const body = await request.json();
     const { amount, currency = 'eur', planData, entityData, responsibleData, kitComunicacion, kitDetails } = body;
 

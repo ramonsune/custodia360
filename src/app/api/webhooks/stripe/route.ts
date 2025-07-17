@@ -11,11 +11,13 @@ import {
   KitData
 } from '@/lib/email';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-06-30.basil',
-});
+const stripe = process.env.STRIPE_SECRET_KEY
+  ? new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: '2025-06-30.basil',
+    })
+  : null;
 
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
 
 // Extender el tipo Invoice para incluir subscription
 interface StripeInvoiceWithSubscription extends Stripe.Invoice {
@@ -23,6 +25,14 @@ interface StripeInvoiceWithSubscription extends Stripe.Invoice {
 }
 
 export async function POST(request: NextRequest) {
+  // Verificar que Stripe esté configurado
+  if (!stripe || !webhookSecret) {
+    return NextResponse.json(
+      { error: 'Stripe webhook no está configurado' },
+      { status: 500 }
+    );
+  }
+
   const body = await request.text();
   const signature = request.headers.get('stripe-signature')!;
 

@@ -11,12 +11,22 @@ import {
   KitData
 } from '@/lib/email';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-06-30.basil',
-});
+const stripe = process.env.STRIPE_SECRET_KEY
+  ? new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: '2025-06-30.basil',
+    })
+  : null;
 
 export async function POST(request: NextRequest) {
   try {
+    // Verificar que Stripe esté configurado
+    if (!stripe) {
+      return NextResponse.json(
+        { error: 'Stripe no está configurado' },
+        { status: 500 }
+      );
+    }
+
     const body = await request.json();
     const { paymentIntentId, entityData, responsibleData, planData, kitComunicacion } = body;
 
