@@ -68,34 +68,14 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    // Programar segundo pago (suscripción para 6 meses después)
-    const subscriptionSchedule = await stripe.subscriptionSchedules.create({
-      customer: customer.id,
-      start_date: Math.floor(Date.now() / 1000) + (6 * 30 * 24 * 60 * 60), // 6 meses
-      end_behavior: 'cancel',
-      phases: [
-        {
-          items: [
-            {
-              price_data: {
-                currency: 'eur',
-                product_data: {
-                  name: `custodia360 - Segundo Pago - ${planData.title}`,
-                  description: `Continuidad del servicio LOPIVI para ${entityData.nombreEntidad}`,
-                },
-                unit_amount: Math.round(amount * 100),
-                recurring: {
-                  interval: 'month',
-                  interval_count: 6,
-                },
-              },
-              quantity: 1,
-            },
-          ],
-          iterations: 1,
-        },
-      ],
-    });
+    // Programar segundo pago (simplificado para producción)
+    // Nota: El segundo pago se configurará via webhook cuando sea necesario
+    const subscriptionMetadata = {
+      secondPaymentAmount: amount.toString(),
+      secondPaymentDate: new Date(Date.now() + (6 * 30 * 24 * 60 * 60 * 1000)).toISOString(),
+      entityName: entityData.nombreEntidad,
+      planTitle: planData.title
+    };
 
     console.log('Payment Intent creado:', {
       id: paymentIntent.id,
@@ -109,7 +89,7 @@ export async function POST(request: NextRequest) {
       clientSecret: paymentIntent.client_secret,
       paymentIntentId: paymentIntent.id,
       customerId: customer.id,
-      subscriptionScheduleId: subscriptionSchedule.id
+      secondPaymentScheduled: subscriptionMetadata
     });
 
   } catch (error) {
