@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -32,6 +32,11 @@ export default function PlanesPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isStripeOpen, setIsStripeOpen] = useState(false);
   const [currentPlan, setCurrentPlan] = useState<Plan | null>(null);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const plans: Plan[] = [
     {
@@ -370,12 +375,14 @@ export default function PlanesPage() {
         </div>
       </section>
 
-      {/* Stripe Checkout Modal */}
-      <StripeCheckout
-        isOpen={isStripeOpen}
-        onClose={() => setIsStripeOpen(false)}
-        selectedPlan={currentPlan}
-      />
+      {/* Stripe Checkout Modal - Solo del lado del cliente */}
+      {isClient && (
+        <StripeCheckout
+          isOpen={isStripeOpen}
+          onClose={() => setIsStripeOpen(false)}
+          selectedPlan={currentPlan}
+        />
+      )}
     </div>
   );
 }

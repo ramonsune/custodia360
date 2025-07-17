@@ -67,6 +67,14 @@ const cardElementOptions = {
 export default function StripeCheckout({ isOpen, onClose, selectedPlan }: StripeCheckoutProps) {
   const stripe = useStripe();
   const elements = useElements();
+
+  // Durante SSR o cuando no hay contexto de Stripe
+  if (!stripe || !elements) {
+    if (typeof window === 'undefined') {
+      // Durante SSR, no renderizar el componente
+      return null;
+    }
+  }
   const [currentStep, setCurrentStep] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
