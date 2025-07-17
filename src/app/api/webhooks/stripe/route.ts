@@ -236,7 +236,7 @@ async function handleSecondPaymentFailure(invoice: StripeInvoiceWithSubscription
   if (process.env.ENABLE_EMAIL_NOTIFICATIONS === 'true') {
     try {
       // Obtener datos del cliente desde Stripe
-      if (invoice.customer && typeof invoice.customer === 'string') {
+      if (stripe && invoice.customer && typeof invoice.customer === 'string') {
         const customer = await stripe.customers.retrieve(invoice.customer) as Stripe.Customer;
 
         // Preparar datos para el recordatorio
