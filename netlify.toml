@@ -3,7 +3,7 @@
 
 [build]
   publish = ".next"
-  command =command = "bun run build && echo 'Build completed'"
+  command = "bun run build"
 
 [build.environment]
   NODE_VERSION = "18"
