@@ -1,0 +1,129 @@
+Netlify Build                                                 
+10:11:02 AM: ────────────────────────────────────────────────────────────────
+10:11:02 AM: ​
+10:11:02 AM: ❯ Version
+10:11:02 AM:   @netlify/build 34.2.5
+10:11:02 AM: ​
+10:11:02 AM: ❯ Flags
+10:11:02 AM:   accountId: 687005e6bda2da0d8f7ec034
+10:11:02 AM:   baseRelDir: true
+10:11:02 AM:   buildId: 687a0185fe0bbc940b74b80b
+10:11:02 AM:   deployId: 687a0185fe0bbc940b74b80d
+10:11:02 AM: ​
+10:11:02 AM: ❯ Current directory
+10:11:02 AM:   /opt/build/repo
+10:11:02 AM: ​
+10:11:02 AM: ❯ Config file
+10:11:02 AM:   /opt/build/repo/netlify.toml
+10:11:02 AM: ​
+10:11:02 AM: ❯ Context
+10:11:02 AM:   production
+10:11:03 AM: ​
+10:11:03 AM: ❯ Installing extensions
+10:11:03 AM:    - neon
+10:11:54 AM: ​
+10:11:54 AM: ❯ Using Next.js Runtime - v5.11.6
+10:11:54 AM: ​
+10:11:54 AM: ❯ Loading extensions
+10:11:54 AM:    - neon
+10:11:55 AM: No Next.js cache to restore
+10:11:55 AM: ​
+10:11:55 AM: build.command from netlify.toml                               
+10:11:55 AM: ────────────────────────────────────────────────────────────────
+10:11:55 AM: ​
+10:11:55 AM: $ bun run build
+10:11:55 AM: $ next build
+10:11:56 AM: ⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
+10:11:56 AM:    ▲ Next.js 15.3.2
+10:11:56 AM:    Creating an optimized production build ...
+10:12:05 AM:  ✓ Compiled successfully in 6.0s
+10:12:05 AM:    Linting and checking validity of types ...
+10:12:11 AM: Failed during stage 'building site': Build script returned non-zero exit code: 2
+10:12:10 AM: 
+10:12:10 AM: Failed to compile.
+10:12:10 AM: ./src/components/StripeCheckoutReal.tsx
+10:12:10 AM: 78:41  Error: React Hook "useState" is called conditionally. React Hooks must be called in the exact same order in every component render.  react-hooks/rules-of-hooks
+10:12:10 AM: 79:43  Error: React Hook "useState" is called conditionally. React Hooks must be called in the exact same order in every component render.  react-hooks/rules-of-hooks
+10:12:10 AM: 80:31  Error: React Hook "useState" is called conditionally. React Hooks must be called in the exact same order in every component render.  react-hooks/rules-of-hooks
+10:12:10 AM: 81:35  Error: React Hook "useState" is called conditionally. React Hooks must be called in the exact same order in every component render.  react-hooks/rules-of-hooks
+10:12:10 AM: info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+10:12:10 AM: error: script "build" exited with code 1
+10:12:11 AM: ​
+10:12:11 AM: "build.command" failed                                        
+10:12:11 AM: ────────────────────────────────────────────────────────────────
+10:12:11 AM: ​
+10:12:11 AM:   Error message
+10:12:11 AM:   Command failed with exit code 1: bun run build
+10:12:11 AM: ​
+10:12:11 AM:   Error location
+10:12:11 AM:   In build.command from netlify.toml:
+10:12:11 AM:   bun run build
+10:12:11 AM: ​
+10:12:11 AM:   Resolved config
+10:12:11 AM:   build:
+10:12:11 AM:     command: bun run build
+10:12:11 AM:     commandOrigin: config
+10:12:11 AM:     environment:
+10:12:11 AM:       - NODE_VERSION
+10:12:11 AM:       - NPM_FLAGS
+10:12:11 AM:       - NETLIFY_NEXT_PLUGIN_SKIP
+10:12:11 AM:       - NODE_ENV
+10:12:11 AM:     publish: /opt/build/repo/.next
+10:12:11 AM:     publishOrigin: config
+10:12:11 AM:   functions:
+10:12:11 AM:     "*":
+10:12:11 AM:       node_bundler: esbuild
+10:12:11 AM:   functionsDirectory: /opt/build/repo/netlify/functions
+10:12:11 AM:   headers:
+10:12:11 AM:     - for: /*
+      values:
+        Content-Security-Policy: "default-src 'self'; script-src 'self' 'unsafe-inline'
+          'unsafe-eval' https://js.stripe.com; style-src 'self' 'unsafe-inline';
+          img-src 'self' data: https:; font-src 'self' https:; connect-src 'self'
+          https://api.stripe.com https://api.resend.com;"
+        Referrer-Policy: strict-origin-when-cross-origin
+        X-Content-Type-Options: nosniff
+        X-Frame-Options: DENY
+        X-XSS-Protection: 1; mode=block
+    - for: /static/*
+      values:
+        Cache-Control: public, max-age=31536000, immutable
+    - for: "*.js"
+      values:
+        Cache-Control: public, max-age=31536000, immutable
+    - for: "*.css"
+      values:
+        Cache-Control: public, max-age=31536000, immutable
+    - for: /api/*
+      values:
+        Access-Control-Allow-Headers: Content-Type, Authorization, stripe-signature
+        Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+        Access-Control-Allow-Origin: https://custodia360.es
+    - for: /api/webhooks/stripe
+      values:
+        Access-Control-Allow-Headers: stripe-signature, content-type
+        Access-Control-Allow-Methods: POST
+        Access-Control-Allow-Origin: https://api.stripe.com
+  headersOrigin: config
+  plugins:
+    - inputs: {}
+      origin: config
+      package: "@netlify/plugin-nextjs"
+  redirects:
+    - conditions:
+        Role:
+          - admin
+      from: /*
+      status: 200
+      to: /index.html
+    - from: /api/*
+      status: 200
+      to: /.netlify/functions/:splat
+    - force: true
+      from: https://www.custodia360.es/*
+      status: 301
+      to: https://custodia360.es/:splat
+  redirectsOrigin: config
+10:12:11 AM: Build failed due to a user error: Build script returned non-zero exit code: 2
+10:12:11 AM: Failing build: Failed to build site
+10:12:11 AM: Finished processing build request in 1m23.234s
